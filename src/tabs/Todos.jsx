@@ -1,8 +1,8 @@
 import Form from '../components/Form/Form';
 import Text from '../components/Text/Text';
-import { useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import TodoList from '../components/TodoList/TodoList';
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 
 export default function Todos() {
   const [todos, setTodos] = useState([
@@ -10,9 +10,15 @@ export default function Todos() {
     { id: '2', text: 'Get all tasks done on time' },
   ]);
 
+  const nextId = useRef(2);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
   const addNewTodo = text => {
     const newTodo = {
-      id: nanoid(),
+      id: (nextId.current += 1),
       text,
     };
     setTodos(prevTodos => [...prevTodos, newTodo]);
